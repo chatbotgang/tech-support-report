@@ -1,6 +1,6 @@
 """
 generate_report.py
-每週一執行：查詢 Supabase → 計算三個產品數據 → 輸出 JSON 至 docs/data/
+每週一執行：查詢 Supabase → 計算三個產品數據 → AI Insight → 輸出 JSON 至 docs/data/
 """
 
 import os
@@ -40,6 +40,7 @@ print(f"UTC 範圍: {week_start_utc} ～ {week_end_utc}")
 # ─── 2. Supabase 查詢 ──────────────────────────────────────────────────────────
 SUPABASE_URL = os.environ['SUPABASE_URL'].rstrip('/')
 SUPABASE_KEY = os.environ['SUPABASE_SERVICE_KEY']
+ANTHROPIC_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
 
 HEADERS = {
     'apikey': SUPABASE_KEY,
@@ -49,7 +50,6 @@ HEADERS = {
 }
 
 def fetch_all_tickets():
-    """用 Supabase REST API 取得所有 Issue Ticket，再用 Python 過濾時間"""
     url = f"{SUPABASE_URL}/rest/v1/task_state"
     all_rows = []
     offset = 0
@@ -57,7 +57,7 @@ def fetch_all_tickets():
 
     while True:
         params = {
-            'select': 'id,name,ticket_created_at,ticket_completed_at,assignee_name,custom_fields',
+            'select': 'id,name,ticket_created_at,ticket_completed_at,assignee_name,custom_fields,ai_summary',
             'name': 'ilike.%Issue Ticket%',
             'limit': limit,
             'offset': offset,
@@ -75,7 +75,6 @@ def fetch_all_tickets():
 
     print(f"  Supabase 總共回傳: {len(all_rows)} 筆")
 
-    # 展開 custom_fields
     result = []
     for r in all_rows:
         cf = r.get('custom_fields') or {}
@@ -85,14 +84,12 @@ def fetch_all_tickets():
             except:
                 cf = {}
 
-        # 從 name 解析 product：[Issue Ticket]-[MAAC/...] 或 [Issue Ticket]-[CAAC/...]
         name = r.get('name', '')
         product_from_name = None
         m = re.search(r'\[(MAAC|CAAC|DAAC)[/\]]', name)
         if m:
             product_from_name = m.group(1)
 
-        # custom_fields 的 Product 優先，沒有就用 name 解析
         product = cf.get('Product') or product_from_name
 
         result.append({
@@ -101,6 +98,7 @@ def fetch_all_tickets():
             'ticket_created_at': r.get('ticket_created_at'),
             'ticket_completed_at': r.get('ticket_completed_at'),
             'assignee_name': r.get('assignee_name'),
+            'ai_summary': r.get('ai_summary') or '',
             'product': product,
             'priority': cf.get('Priority'),
             'feature': cf.get('Feature'),
@@ -110,16 +108,12 @@ def fetch_all_tickets():
     return result
 
 def filter_by_period(df, start_utc_str, end_utc_str):
-    """用 Python 過濾時間區間"""
     if df.empty:
         return df
-
     start = pd.Timestamp(start_utc_str, tz='UTC')
     end   = pd.Timestamp(end_utc_str,   tz='UTC')
-
     created   = df['ticket_created_at']
     completed = df['ticket_completed_at']
-
     mask = (
         ((created >= start) & (created <= end)) |
         ((completed >= start) & (completed <= end)) |
@@ -127,7 +121,91 @@ def filter_by_period(df, start_utc_str, end_utc_str):
     )
     return df[mask].copy()
 
-# ─── 3. 取得資料 ─────────────────────────────────────────────────────────────
+# ─── 3. AI Insight 產生 ────────────────────────────────────────────────────────
+def generate_ai_insight(product, overview, risk_flags, cur_df, week_start_label, week_end_label):
+    """呼叫 Anthropic API，根據 ai_summary 和統計數據產生管理層洞察"""
+    if not ANTHROPIC_KEY:
+        print(f"  ⚠️  無 ANTHROPIC_API_KEY，跳過 AI Insight")
+        return None
+
+    # 收集本週所有票的 ai_summary（最多 60 筆避免 token 超限）
+    summaries = cur_df[cur_df['ai_summary'].str.strip() != '']['ai_summary'].tolist()[:60]
+    if not summaries:
+        return None
+
+    summaries_text = '\n---\n'.join(summaries)
+
+    # 統計數字摘要
+    stats = f"""
+產品：{product}
+報告週期：{week_start_label} ～ {week_end_label}
+本週新增工單：{overview['created']['cur']}（WoW {'+' if overview['created']['delta'] >= 0 else ''}{overview['created']['delta']}）
+本週完成工單：{overview['completed']['cur']}（WoW {'+' if overview['completed']['delta'] >= 0 else ''}{overview['completed']['delta']}）
+積壓工單：{overview['backlog']['cur']}（WoW {'+' if overview['backlog']['delta'] >= 0 else ''}{overview['backlog']['delta']}）
+結構性風險：{'是' if risk_flags['any'] else '否'}
+- 空值 Resolve Type > 20%：{'是' if risk_flags['empty_resolve_type'] else '否'}
+- 單一 Feature 積壓 > 30%：{'是' if risk_flags['single_feature_backlog'] else '否'}
+- P1 積壓週環比增加：{'是' if risk_flags['p1_backlog_increase'] else '否'}
+- 連續兩週新增 > 完成：{'是' if risk_flags['consecutive_created_gt_completed'] else '否'}
+"""
+
+    prompt = f"""你是一位資深的 SaaS 產品支援分析師。以下是 {product} 產品本週的支援工單統計與各工單的 AI 摘要。
+
+## 統計數據
+{stats}
+
+## 本週工單 AI 摘要（共 {len(summaries)} 筆）
+{summaries_text}
+
+請根據以上資料，用**繁體中文**撰寫管理層洞察報告，必須包含以下 7 個面向，每個面向 2-3 句話，具體且可執行：
+
+1. **產品穩定性風險**：本週最常見的問題類型與嚴重程度
+2. **支援工作量結構**：工作量分布特徵，哪些 Feature 佔用最多資源
+3. **發版品質影響**：新功能相關工單對支援負擔的影響
+4. **積壓健康狀況**：積壓趨勢與潛在風險
+5. **升級風險區域**：哪些問題最可能升級為客戶流失風險
+6. **新興 Feature 風險**：本週出現的新問題模式或 Feature 風險
+7. **立即建議行動**：3-5 條具體可執行的建議（用條列式）
+
+請直接輸出 JSON 格式，不要有任何前言或 markdown：
+{{
+  "stability_risk": "...",
+  "workload_structure": "...",
+  "release_quality": "...",
+  "backlog_health": "...",
+  "escalation_risk": "...",
+  "emerging_risk": "...",
+  "action_items": ["建議1", "建議2", "建議3"]
+}}"""
+
+    try:
+        resp = requests.post(
+            'https://api.anthropic.com/v1/messages',
+            headers={
+                'x-api-key': ANTHROPIC_KEY,
+                'anthropic-version': '2023-06-01',
+                'content-type': 'application/json',
+            },
+            json={
+                'model': 'claude-sonnet-4-5',
+                'max_tokens': 1500,
+                'messages': [{'role': 'user', 'content': prompt}]
+            },
+            timeout=60
+        )
+        resp.raise_for_status()
+        content = resp.json()['content'][0]['text'].strip()
+        # 清理可能的 markdown
+        content = re.sub(r'^```json\s*', '', content)
+        content = re.sub(r'\s*```$', '', content)
+        insight = json.loads(content)
+        print(f"  ✅ AI Insight 產生完成")
+        return insight
+    except Exception as e:
+        print(f"  ⚠️  AI Insight 失敗: {e}")
+        return None
+
+# ─── 4. 取得資料 ─────────────────────────────────────────────────────────────
 print("查詢 Supabase 資料...")
 all_rows = fetch_all_tickets()
 
@@ -150,7 +228,6 @@ df_all = pd.DataFrame(all_rows)
 df_all['ticket_created_at']   = pd.to_datetime(df_all['ticket_created_at'],   utc=True, errors='coerce')
 df_all['ticket_completed_at'] = pd.to_datetime(df_all['ticket_completed_at'], utc=True, errors='coerce')
 
-# 印出 product 分佈 debug
 print(f"  Product 分佈: {df_all['product'].value_counts().to_dict()}")
 print(f"  日期範圍: {df_all['ticket_created_at'].min()} ～ {df_all['ticket_created_at'].max()}")
 
@@ -162,7 +239,7 @@ print(f"上週篩選中...")
 df_prev = filter_by_period(df_all, prev_week_start_utc, prev_week_end_utc)
 print(f"上週共 {len(df_prev)} 筆")
 
-# ─── 4. 工具函式 ─────────────────────────────────────────────────────────────
+# ─── 5. 工具函式 ─────────────────────────────────────────────────────────────
 def normalize_priority(p):
     if not p: return '(Empty)'
     p = str(p).strip()
@@ -180,7 +257,7 @@ def top_features(series, n=3):
     counts = series.value_counts().head(n)
     return [{'feature': str(k), 'count': int(v)} for k, v in counts.items()]
 
-# ─── 5. 每個產品分析 ─────────────────────────────────────────────────────────
+# ─── 6. 每個產品分析 ─────────────────────────────────────────────────────────
 PRODUCTS = ['MAAC', 'CAAC', 'DAAC']
 products_data = {}
 
@@ -310,10 +387,24 @@ for product in PRODUCTS:
 
     risk_flags = {'empty_resolve_type': empty_rt_pct > 20, 'single_feature_backlog': top_bl_pct > 30, 'p1_backlog_increase': p1_bl_up, 'consecutive_created_gt_completed': consec, 'any': any([empty_rt_pct > 20, top_bl_pct > 30, p1_bl_up, consec])}
 
-    products_data[product] = {'empty': False, 'product': product, 'overview': overview, 'resolve_analysis': resolve_analysis, 'priority_distribution': priority_dist, 'new_feature_impact': nf_dist, 'feature_hotspot': feature_hotspot, 'data_quality': dq, 'risk_flags': risk_flags}
+    # AI Insight
+    print(f"  產生 AI Insight...")
+    ai_insight = generate_ai_insight(product, overview, risk_flags, cur, week_start_label, week_end_label)
+
+    products_data[product] = {
+        'empty': False, 'product': product,
+        'overview': overview,
+        'resolve_analysis': resolve_analysis,
+        'priority_distribution': priority_dist,
+        'new_feature_impact': nf_dist,
+        'feature_hotspot': feature_hotspot,
+        'data_quality': dq,
+        'risk_flags': risk_flags,
+        'ai_insight': ai_insight,
+    }
     print(f"  ✅ {product}: 新增={overview['created']['cur']}, 完成={overview['completed']['cur']}, 積壓={overview['backlog']['cur']}")
 
-# ─── 6. 輸出 JSON ─────────────────────────────────────────────────────────────
+# ─── 7. 輸出 JSON ─────────────────────────────────────────────────────────────
 output = {'generated_at': datetime.now(tw).isoformat(), 'report_date': report_date_label, 'week_start': week_start_label, 'week_end': week_end_label, 'products': products_data}
 
 output_dir = Path('docs/data')
@@ -343,4 +434,3 @@ with open(history_path, 'w', encoding='utf-8') as f:
     json.dump(history, f, ensure_ascii=False, indent=2)
 print(f"✅ 更新 history.json（共 {len(history)} 週）")
 print("\n🎉 完成！")
-
