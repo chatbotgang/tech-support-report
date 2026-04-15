@@ -9,20 +9,20 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg:        #0a0c10;
-    --surface:   #111318;
-    --border:    #1e2330;
-    --border2:   #2a3044;
-    --text:      #c8d0e0;
-    --muted:     #5a6380;
-    --accent:    #4f8ef7;
-    --accent2:   #7c5df8;
-    --green:     #2dd4a0;
-    --red:       #f75c5c;
-    --amber:     #f7a84f;
-    --maac:      #4f8ef7;
-    --caac:      #7c5df8;
-    --daac:      #2dd4a0;
+    --bg:        #f4f6fa;
+    --surface:   #ffffff;
+    --border:    #e2e6f0;
+    --border2:   #cdd3e0;
+    --text:      #2c3349;
+    --muted:     #8b93a8;
+    --accent:    #3b7de8;
+    --accent2:   #6c47e8;
+    --green:     #0faa7e;
+    --red:       #e84040;
+    --amber:     #e8880f;
+    --maac:      #3b7de8;
+    --caac:      #6c47e8;
+    --daac:      #0faa7e;
     --font-mono: 'DM Mono', monospace;
     --font-body: 'Noto Sans TC', sans-serif;
   }
@@ -45,8 +45,8 @@
     content: '';
     position: fixed; inset: 0;
     background-image:
-      linear-gradient(rgba(79,142,247,.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(79,142,247,.03) 1px, transparent 1px);
+      linear-gradient(rgba(59,125,232,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,125,232,.05) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none; z-index: 0;
   }
@@ -54,7 +54,7 @@
   /* ── HEADER ── */
   header {
     position: sticky; top: 0; z-index: 100;
-    background: rgba(10,12,16,.9);
+    background: rgba(244,246,250,.92);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     padding: 0 24px;
@@ -116,7 +116,7 @@
     font-size: 28px;
     font-weight: 700;
     letter-spacing: -.02em;
-    color: #fff;
+    color: var(--text);
     line-height: 1.2;
   }
   .page-title .subtitle {
@@ -215,7 +215,7 @@
     font-size: 40px;
     font-weight: 700;
     line-height: 1;
-    color: #fff;
+    color: var(--text);
     letter-spacing: -.02em;
     margin-bottom: 8px;
   }
@@ -292,7 +292,7 @@
   }
   .bar-track {
     height: 6px;
-    background: var(--border2);
+    background: var(--border);
     border-radius: 3px;
     overflow: hidden;
   }
@@ -357,7 +357,7 @@
     font-size: 11px;
     margin-bottom: 6px;
   }
-  .priority-block .p-count { font-size: 26px; font-weight: 700; color: #fff; }
+  .priority-block .p-count { font-size: 26px; font-weight: 700; color: var(--text); }
   .priority-block .p-pct { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
   .priority-block .p-wow { font-family: var(--font-mono); font-size: 10px; margin-top: 4px; }
 
@@ -828,7 +828,7 @@ function renderDataQuality(data) {
 }
 
 // ── Charts ─────────────────────────────────────────────────────────────────────
-Chart.defaults.color = '#5a6380';
+Chart.defaults.color = '#8b93a8';
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 11;
 
