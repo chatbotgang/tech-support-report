@@ -15,12 +15,12 @@ utc = pytz.utc
 now = datetime.now(tw)
 
 # 找最近一個完整結束的週日（週一跑時是上週日，週三跑時也是上週日）
-days_since_monday = now.weekday()  # 週一=0, 週二=1, 週三=2...
+days_since_monday = now.weekday()
 last_monday = now.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=days_since_monday)
-week_start_tw = last_monday - timedelta(days=7)
-week_end_tw   = week_start_tw + timedelta(days=7)
-prev_week_start_tw = week_start_tw - timedelta(days=7)
-prev_week_end_tw   = week_end_tw   - timedelta(days=7)
+week_end_tw    = last_monday - timedelta(days=7)   # 04/13 00:00 台灣（篩選截止點）
+week_start_tw  = week_end_tw - timedelta(days=7)   # 04/06 00:00 台灣
+prev_week_end_tw   = week_start_tw                 # 04/06 00:00
+prev_week_start_tw = prev_week_end_tw - timedelta(days=7)  # 03/30 00:00
 
 def to_utc(dt):
     return dt.astimezone(utc).strftime('%Y-%m-%dT%H:%M:%S')
@@ -29,9 +29,9 @@ week_start_utc      = to_utc(week_start_tw)
 week_end_utc        = to_utc(week_end_tw)
 prev_week_start_utc = to_utc(prev_week_start_tw)
 prev_week_end_utc   = to_utc(prev_week_end_tw)
-report_date_label   = week_end_tw.strftime('%Y-%m-%d')
-week_start_label    = week_start_tw.strftime('%Y-%m-%d')
-week_end_label      = week_end_tw.strftime('%Y-%m-%d')
+week_start_label  = week_start_tw.strftime('%Y-%m-%d')                      # 04/06
+week_end_label    = (week_end_tw - timedelta(days=1)).strftime('%Y-%m-%d')  # 04/12
+report_date_label = week_end_label
 
 print(f"報告週期: {week_start_label} ~ {week_end_label}")
 
