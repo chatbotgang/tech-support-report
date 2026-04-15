@@ -123,14 +123,64 @@ def filter_by_period(df, start_utc_str, end_utc_str):
 
 # ─── 3. AI Insight 產生 ────────────────────────────────────────────────────────
 def generate_ai_insight(product, overview, risk_flags, cur_df, week_start_label, week_end_label):
-    """呼叫 Anthropic API，根據 ai_summary 和統計數據產生管理層洞察"""
     if not ANTHROPIC_KEY:
         print(f"  ⚠️  無 ANTHROPIC_API_KEY，跳過 AI Insight")
         return None
 
-    # 收集本週所有票的 ai_summary（最多 60 筆避免 token 超限）
     summaries = cur_df[cur_df['ai_summary'].str.strip() != '']['ai_summary'].tolist()[:60]
     if not summaries:
+        return None
+
+    summaries_text = '\n---\n'.join(summaries)
+    stats = f"""
+產品：{product}
+報告週期：{week_start_label} ～ {week_end_label}
+本週新增工單：{overview['created']['cur']}（WoW {'+' if overview['created']['delta'] >= 0 else ''}{overview['created']['delta']}）
+本週完成工單：{overview['completed']['cur']}（WoW {'+' if overview['completed']['delta'] >= 0 else ''}{overview['completed']['delta']}）
+積壓工單：{overview['backlog']['cur']}（WoW {'+' if overview['backlog']['delta'] >= 0 else ''}{overview['backlog']['delta']}）
+結構性風險：{'是' if risk_flags['any'] else '否'}
+"""
+
+    prompt = f"""你是一位資深的 SaaS 產品支援分析師。以下是 {product} 產品本週的支援工單統計與各工單的 AI 摘要。
+
+## 統計數據
+{stats}
+
+## 本週工單 AI 摘要（共 {len(summaries)} 筆）
+{summaries_text}
+
+請根據以上資料，用繁體中文撰寫管理層洞察，輸出純 JSON，不要有任何說明文字或 markdown：
+{{"stability_risk":"...","workload_structure":"...","release_quality":"...","backlog_health":"...","escalation_risk":"...","emerging_risk":"...","action_items":["建議1","建議2","建議3"]}}"""
+
+    try:
+        resp = requests.post(
+            'https://api.anthropic.com/v1/messages',
+            headers={
+                'x-api-key': ANTHROPIC_KEY,
+                'anthropic-version': '2023-06-01',
+                'content-type': 'application/json',
+            },
+            json={
+                'model': 'claude-haiku-4-5-20251001',
+                'max_tokens': 1500,
+                'messages': [{'role': 'user', 'content': prompt}]
+            },
+            timeout=60
+        )
+        resp.raise_for_status()
+        content = resp.json()['content'][0]['text'].strip()
+        content = re.sub(r'^```json\s*', '', content)
+        content = re.sub(r'^```\s*', '', content)
+        content = re.sub(r'\s*```$', '', content)
+        start = content.find('{')
+        end = content.rfind('}')
+        if start != -1 and end != -1:
+            content = content[start:end+1]
+        insight = json.loads(content)
+        print(f"  ✅ AI Insight 產生完成")
+        return insight
+    except Exception as e:
+        print(f"  ⚠️  AI Insight 失敗: {e}")
         return None
 
     summaries_text = '\n---\n'.join(summaries)
