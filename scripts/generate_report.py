@@ -194,10 +194,16 @@ def generate_ai_insight(product, overview, risk_flags, cur_df, week_start_label,
             timeout=60
         )
         resp.raise_for_status()
-        content = resp.json()['content'][0]['text'].strip()
-        # 清理可能的 markdown
+      content = resp.json()['content'][0]['text'].strip()
+        # 清理 markdown
         content = re.sub(r'^```json\s*', '', content)
+        content = re.sub(r'^```\s*', '', content)
         content = re.sub(r'\s*```$', '', content)
+        # 只取第一個 { 到最後一個 } 之間的內容
+        start = content.find('{')
+        end = content.rfind('}')
+        if start != -1 and end != -1:
+            content = content[start:end+1]
         insight = json.loads(content)
         print(f"  ✅ AI Insight 產生完成")
         return insight
