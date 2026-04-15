@@ -14,7 +14,7 @@ tw  = pytz.timezone('Asia/Taipei')
 utc = pytz.utc
 now = datetime.now(tw)
 
-week_end_tw   = now.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(seconds=1)
+week_end_tw   = now.replace(hour=0, minute=0, second=0, microsecond=0)
 week_start_tw = (week_end_tw - timedelta(days=6)).replace(hour=0, minute=0, second=0, microsecond=0)
 prev_week_start_tw = week_start_tw - timedelta(days=7)
 prev_week_end_tw   = week_end_tw   - timedelta(days=7)
