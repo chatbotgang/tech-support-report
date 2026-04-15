@@ -211,12 +211,23 @@ for product in ['MAAC','CAAC','DAAC']:
         products_data[product] = {'empty':True,'product':product}
         continue
 
-    cc = cur[cur['ticket_created_at'].between(ws,we)]
-    cd = cur[cur['ticket_completed_at'].notna() & cur['ticket_completed_at'].between(ws,we)]
-    cb = cur[cur['ticket_completed_at'].isna() | (cur['ticket_completed_at']>we)]
-    pc = prev[prev['ticket_created_at'].between(ps,pe)]   if not prev.empty else pd.DataFrame()
-    pd_ = prev[prev['ticket_completed_at'].notna() & prev['ticket_completed_at'].between(ps,pe)] if not prev.empty else pd.DataFrame()
-    pb = prev[prev['ticket_completed_at'].isna() | (prev['ticket_completed_at']>pe)] if not prev.empty else pd.DataFrame()
+    cc = cur[cur['ticket_created_at'].between(ws, we)]
+    cd = cur[cur['ticket_completed_at'].notna() & cur['ticket_completed_at'].between(ws, we)]
+
+    # 積壓：建立時間 <= 本週結束，且尚未完成或完成時間在本週後
+    cb = cur[
+        (cur['ticket_created_at'] <= we) &
+        (cur['ticket_completed_at'].isna() | (cur['ticket_completed_at'] > we))
+    ]
+
+    pc  = prev[prev['ticket_created_at'].between(ps, pe)]   if not prev.empty else pd.DataFrame()
+    pd_ = prev[prev['ticket_completed_at'].notna() & prev['ticket_completed_at'].between(ps, pe)] if not prev.empty else pd.DataFrame()
+
+    # 上週積壓：建立時間 <= 上週結束，且尚未完成或完成時間在上週後
+    pb = prev[
+        (prev['ticket_created_at'] <= pe) &
+        (prev['ticket_completed_at'].isna() | (prev['ticket_completed_at'] > pe))
+    ] if not prev.empty else pd.DataFrame()
 
     overview = {
         'created':   wow(len(cc), len(pc)),
