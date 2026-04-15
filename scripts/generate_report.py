@@ -14,13 +14,14 @@ tw  = pytz.timezone('Asia/Taipei')
 utc = pytz.utc
 now = datetime.now(tw)
 
-# 找最近一個完整結束的週日（週一跑時是上週日，週三跑時也是上週日）
-days_since_monday = now.weekday()
-last_monday = now.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=days_since_monday)
-week_end_tw    = last_monday                       # 04/13 00:00 台灣（篩選截止點）
-week_start_tw  = week_end_tw - timedelta(days=7)   # 04/06 00:00 台灣
-prev_week_end_tw   = week_start_tw                 # 04/06 00:00
-prev_week_start_tw = prev_week_end_tw - timedelta(days=7)  # 03/30 00:00
+# 上一週：週一 00:00:00 ～ 週日 23:59:59 台灣時間
+days_since_monday = now.weekday()  # 週一=0, 週二=1...
+this_monday = now.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=days_since_monday)
+week_start_tw = this_monday - timedelta(days=7)          # 上週一 00:00:00
+week_end_tw   = this_monday - timedelta(seconds=1)       # 上週日 23:59:59
+
+prev_week_start_tw = week_start_tw - timedelta(days=7)   # 上上週一 00:00:00
+prev_week_end_tw   = week_start_tw - timedelta(seconds=1) # 上上週日 23:59:59
 
 def to_utc(dt):
     return dt.astimezone(utc).strftime('%Y-%m-%dT%H:%M:%S')
@@ -29,11 +30,13 @@ week_start_utc      = to_utc(week_start_tw)
 week_end_utc        = to_utc(week_end_tw)
 prev_week_start_utc = to_utc(prev_week_start_tw)
 prev_week_end_utc   = to_utc(prev_week_end_tw)
-week_start_label  = week_start_tw.strftime('%Y-%m-%d')                      # 04/06
-week_end_label    = (week_end_tw - timedelta(days=1)).strftime('%Y-%m-%d')  # 04/12
+
+week_start_label  = week_start_tw.strftime('%Y-%m-%d')
+week_end_label    = week_end_tw.strftime('%Y-%m-%d')
 report_date_label = week_end_label
 
 print(f"報告週期: {week_start_label} ~ {week_end_label}")
+print(f"UTC: {week_start_utc} ~ {week_end_utc}")
 
 # ─── 2. 設定 ───────────────────────────────────────────────────────────────────
 SUPABASE_URL  = os.environ['SUPABASE_URL'].rstrip('/')
@@ -216,8 +219,6 @@ for product in ['MAAC','CAAC','DAAC']:
 
     cc = cur[cur['ticket_created_at'].between(ws, we)]
     cd = cur[cur['ticket_completed_at'].notna() & cur['ticket_completed_at'].between(ws, we)]
-
-    # 積壓：建立時間 <= 本週結束，且尚未完成或完成時間在本週後
     cb = cur[
         (cur['ticket_created_at'] <= we) &
         (cur['ticket_completed_at'].isna() | (cur['ticket_completed_at'] > we))
@@ -225,9 +226,7 @@ for product in ['MAAC','CAAC','DAAC']:
 
     pc  = prev[prev['ticket_created_at'].between(ps, pe)]   if not prev.empty else pd.DataFrame()
     pd_ = prev[prev['ticket_completed_at'].notna() & prev['ticket_completed_at'].between(ps, pe)] if not prev.empty else pd.DataFrame()
-
-    # 上週積壓：建立時間 <= 上週結束，且尚未完成或完成時間在上週後
-    pb = prev[
+    pb  = prev[
         (prev['ticket_created_at'] <= pe) &
         (prev['ticket_completed_at'].isna() | (prev['ticket_completed_at'] > pe))
     ] if not prev.empty else pd.DataFrame()
