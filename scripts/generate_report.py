@@ -111,7 +111,7 @@ def generate_ai_insight(product, overview, risk_flags, cur_df, ws, we):
     if not ANTHROPIC_KEY:
         print("  skip AI Insight: no key")
         return None
-    summaries = [s for s in cur_df['ai_summary'].tolist() if s and s.strip()][:60]
+    summaries = [s[:300] for s in cur_df['ai_summary'].tolist() if s and s.strip()][:40]
     if not summaries:
         print("  skip AI Insight: no summaries")
         return None
