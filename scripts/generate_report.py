@@ -14,8 +14,11 @@ tw  = pytz.timezone('Asia/Taipei')
 utc = pytz.utc
 now = datetime.now(tw)
 
-week_end_tw   = now.replace(hour=0, minute=0, second=0, microsecond=0)
-week_start_tw = (week_end_tw - timedelta(days=6)).replace(hour=0, minute=0, second=0, microsecond=0)
+# 找最近一個完整結束的週日（週一跑時是上週日，週三跑時也是上週日）
+days_since_monday = now.weekday()  # 週一=0, 週二=1, 週三=2...
+last_monday = now.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=days_since_monday)
+week_start_tw = last_monday - timedelta(days=7)
+week_end_tw   = week_start_tw + timedelta(days=7)
 prev_week_start_tw = week_start_tw - timedelta(days=7)
 prev_week_end_tw   = week_end_tw   - timedelta(days=7)
 
