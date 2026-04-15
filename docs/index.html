@@ -416,6 +416,94 @@
     text-align: center;
   }
 
+  /* ── AI INSIGHT ── */
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .insight-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 20px;
+  }
+  .insight-header .insight-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .insight-header .insight-title {
+    font-size: 15px; font-weight: 600; color: var(--text);
+  }
+  .insight-header .insight-subtitle {
+    font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-top: 2px;
+  }
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .insight-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .insight-item .ii-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .insight-item .ii-text {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .insight-actions {
+    background: linear-gradient(135deg, rgba(59,125,232,.06), rgba(108,71,232,.06));
+    border: 1px solid rgba(59,125,232,.15);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .insight-actions .ia-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .insight-actions .ia-list {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .insight-actions .ia-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; line-height: 1.6; color: var(--text);
+  }
+  .insight-actions .ia-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(59,125,232,.12);
+    border-radius: 50%;
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .insight-empty {
+    text-align: center; padding: 32px;
+    color: var(--muted); font-family: var(--font-mono); font-size: 12px;
+  }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     .kpi-grid { grid-template-columns: 1fr 1fr; }
@@ -586,6 +674,7 @@ function renderProduct(product) {
   container.innerHTML = `
     ${renderRiskBanner(data)}
     ${renderKPIs(data, color)}
+    ${renderAIInsight(data)}
     <div class="section-grid">
       ${renderResolveTypeDone(data, color)}
       ${renderResolveTypeBacklog(data, color)}
@@ -877,8 +966,8 @@ function renderPriorityChart(id, dist, color) {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { labels: { boxWidth: 10, padding: 12 } } },
       scales: {
-        x: { grid: { color: '#1e2330' } },
-        y: { grid: { color: '#1e2330' }, beginAtZero: true, ticks: { stepSize: 1 } }
+        x: { grid: { color: '#e2e6f0' } },
+        y: { grid: { color: '#e2e6f0' }, beginAtZero: true, ticks: { stepSize: 1 } }
       }
     }
   });
@@ -906,6 +995,55 @@ function renderNewFeatureChart(id, dist, color) {
       cutout: '65%'
     }
   });
+}
+
+// ── AI Insight ────────────────────────────────────────────────────────────────
+function renderAIInsight(data) {
+  const insight = data.ai_insight;
+  if (!insight) return `<div class="insight-card"><div class="insight-empty">本週尚無 AI 洞察（需設定 ANTHROPIC_API_KEY）</div></div>`;
+
+  const sections = [
+    { key: 'stability_risk',      label: '產品穩定性風險',   icon: '🛡️' },
+    { key: 'workload_structure',  label: '支援工作量結構',   icon: '⚖️' },
+    { key: 'release_quality',     label: '發版品質影響',     icon: '🚀' },
+    { key: 'backlog_health',      label: '積壓健康狀況',     icon: '📊' },
+    { key: 'escalation_risk',     label: '升級風險區域',     icon: '⚠️' },
+    { key: 'emerging_risk',       label: '新興 Feature 風險', icon: '🔍' },
+  ];
+
+  const gridHtml = sections.map(s => `
+    <div class="insight-item">
+      <div class="ii-label">${s.icon} ${s.label}</div>
+      <div class="ii-text">${insight[s.key] || '—'}</div>
+    </div>
+  `).join('');
+
+  const actions = insight.action_items || [];
+  const actionsHtml = actions.length ? `
+    <div class="insight-actions">
+      <div class="ia-title">🎯 立即建議行動</div>
+      <div class="ia-list">
+        ${actions.map((a, i) => `
+          <div class="ia-item">
+            <span class="ia-num">${i + 1}</span>
+            <span>${a}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  return `<div class="insight-card">
+    <div class="insight-header">
+      <div class="insight-icon">✨</div>
+      <div>
+        <div class="insight-title">管理層 AI 洞察</div>
+        <div class="insight-subtitle">由 Claude 根據本週工單 AI 摘要自動生成</div>
+      </div>
+    </div>
+    <div class="insight-grid">${gridHtml}</div>
+    ${actionsHtml}
+  </div>`;
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
