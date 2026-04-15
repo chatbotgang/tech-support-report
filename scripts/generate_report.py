@@ -17,7 +17,7 @@ now = datetime.now(tw)
 # 找最近一個完整結束的週日（週一跑時是上週日，週三跑時也是上週日）
 days_since_monday = now.weekday()
 last_monday = now.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=days_since_monday)
-week_end_tw    = last_monday - timedelta(days=7)   # 04/13 00:00 台灣（篩選截止點）
+week_end_tw    = last_monday                       # 04/13 00:00 台灣（篩選截止點）
 week_start_tw  = week_end_tw - timedelta(days=7)   # 04/06 00:00 台灣
 prev_week_end_tw   = week_start_tw                 # 04/06 00:00
 prev_week_start_tw = prev_week_end_tw - timedelta(days=7)  # 03/30 00:00
@@ -114,7 +114,7 @@ def generate_ai_insight(product, overview, risk_flags, cur_df, ws, we):
     if not ANTHROPIC_KEY:
         print("  skip AI Insight: no key")
         return None
-    summaries = [s[:300] for s in cur_df['ai_summary'].tolist() if s and s.strip()][:40]
+    summaries = [s[:200] for s in cur_df['ai_summary'].tolist() if s and s.strip()][:30]
     if not summaries:
         print("  skip AI Insight: no summaries")
         return None
