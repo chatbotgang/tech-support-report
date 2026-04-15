@@ -140,6 +140,17 @@ def fetch_tickets(start_utc, end_utc):
     )
     return df[mask].copy()
 
+# DEBUG: 先查總筆數確認連線
+debug_resp = requests.get(
+    f"{SUPABASE_URL}/rest/v1/task_state",
+    headers={**HEADERS, 'Prefer': 'count=exact'},
+    params={'select': 'id,name,ticket_created_at', 'name': 'ilike.%Issue Ticket%', 'limit': 5}
+)
+print(f"DEBUG 連線狀態: {debug_resp.status_code}")
+print(f"DEBUG 總筆數 header: {debug_resp.headers.get('content-range', 'N/A')}")
+debug_rows = debug_resp.json()
+print(f"DEBUG 前5筆: {[(r.get('name','?'), r.get('ticket_created_at','?')) for r in debug_rows]}")
+
 print("查詢本週資料...")
 df_cur  = fetch_tickets(week_start_utc, week_end_utc)
 print(f"本週共 {len(df_cur)} 筆")
