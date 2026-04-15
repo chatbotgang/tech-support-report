@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Support Intelligence Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:        #0a0c10;
+    --surface:   #111318;
+    --border:    #1e2330;
+    --border2:   #2a3044;
+    --text:      #c8d0e0;
+    --muted:     #5a6380;
+    --accent:    #4f8ef7;
+    --accent2:   #7c5df8;
+    --green:     #2dd4a0;
+    --red:       #f75c5c;
+    --amber:     #f7a84f;
+    --maac:      #4f8ef7;
+    --caac:      #7c5df8;
+    --daac:      #2dd4a0;
+    --font-mono: 'DM Mono', monospace;
+    --font-body: 'Noto Sans TC', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── GRID BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(79,142,247,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,142,247,.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,12,16,.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+
+  .logo {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: .08em;
+    color: var(--accent);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:.5; transform:scale(.8); }
+  }
+
+  .header-right {
+    display: flex; align-items: center; gap: 16px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--muted);
+  }
+
+  .week-selector {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+  }
+  .week-selector:focus { border-color: var(--accent); }
+
+  /* ── LAYOUT ── */
+  main {
+    position: relative; z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  /* ── PAGE TITLE ── */
+  .page-title {
+    margin-bottom: 32px;
+  }
+  .page-title h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .page-title .subtitle {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* ── PRODUCT TABS ── */
+  .product-tabs {
+    display: flex; gap: 4px;
+    margin-bottom: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+    width: fit-content;
+  }
+  .tab-btn {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 24px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    color: var(--muted);
+    transition: all .2s;
+    letter-spacing: .05em;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active[data-product="MAAC"] { background: rgba(79,142,247,.15); color: var(--maac); box-shadow: inset 0 0 0 1px rgba(79,142,247,.3); }
+  .tab-btn.active[data-product="CAAC"] { background: rgba(124,93,248,.15); color: var(--caac); box-shadow: inset 0 0 0 1px rgba(124,93,248,.3); }
+  .tab-btn.active[data-product="DAAC"] { background: rgba(45,212,160,.15); color: var(--daac); box-shadow: inset 0 0 0 1px rgba(45,212,160,.3); }
+
+  /* ── RISK BANNER ── */
+  .risk-banner {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: rgba(247,92,92,.08);
+    border: 1px solid rgba(247,92,92,.25);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    font-size: 13px;
+  }
+  .risk-banner .risk-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .risk-banner .risk-title { font-weight: 600; color: var(--red); margin-bottom: 4px; }
+  .risk-banner .risk-items { color: var(--text); display: flex; flex-wrap: wrap; gap: 8px; }
+  .risk-chip {
+    background: rgba(247,92,92,.12);
+    border: 1px solid rgba(247,92,92,.2);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    color: var(--red);
+  }
+
+  /* ── KPI CARDS ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+  .kpi-card:hover { border-color: var(--border2); }
+  .kpi-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .kpi-card.created::before  { background: var(--accent); }
+  .kpi-card.completed::before{ background: var(--green); }
+  .kpi-card.backlog::before  { background: var(--amber); }
+
+  .kpi-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    letter-spacing: -.02em;
+    margin-bottom: 8px;
+  }
+  .kpi-wow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .kpi-wow .delta { font-weight: 500; }
+  .kpi-wow .delta.up   { color: var(--red); }
+  .kpi-wow .delta.down { color: var(--green); }
+  .kpi-wow .delta.neutral { color: var(--muted); }
+  .kpi-wow .prev { color: var(--muted); }
+
+  /* ── SECTION GRID ── */
+  .section-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .section-grid.wide { grid-template-columns: 1fr; }
+  .section-grid.three { grid-template-columns: repeat(3, 1fr); }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    position: relative;
+  }
+  .card-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title .badge {
+    background: var(--border2);
+    border-radius: 20px;
+    padding: 1px 8px;
+    font-size: 10px;
+    color: var(--text);
+  }
+
+  /* ── CHART CONTAINER ── */
+  .chart-wrap {
+    position: relative;
+    height: 200px;
+  }
+  .chart-wrap.tall { height: 260px; }
+
+  /* ── BAR TABLE ── */
+  .bar-table { width: 100%; }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 60px 80px;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .bar-row:last-child { border-bottom: none; }
+  .bar-label {
+    font-size: 12px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bar-track {
+    height: 6px;
+    background: var(--border2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width .6s ease;
+  }
+  .bar-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text);
+    text-align: right;
+  }
+  .bar-pct {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  /* ── FEATURE CHIPS ── */
+  .feature-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .feature-chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    background: rgba(255,255,255,.03);
+    color: var(--text);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .feature-chip .chip-count {
+    background: var(--border2);
+    border-radius: 10px;
+    padding: 0 5px;
+    font-size: 10px;
+  }
+  .feature-chip.risk {
+    border-color: rgba(247,92,92,.35);
+    background: rgba(247,92,92,.07);
+    color: var(--red);
+  }
+
+  /* ── PRIORITY DIST ── */
+  .priority-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .priority-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .priority-block .p-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+  .priority-block .p-count { font-size: 26px; font-weight: 700; color: #fff; }
+  .priority-block .p-pct { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+  .priority-block .p-wow { font-family: var(--font-mono); font-size: 10px; margin-top: 4px; }
+
+  /* ── DATA QUALITY ── */
+  .dq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .dq-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+  }
+  .dq-item .dq-label { color: var(--muted); }
+  .dq-item .dq-val { font-family: var(--font-mono); font-weight: 500; }
+  .dq-item .dq-val.warn { color: var(--amber); }
+  .dq-item .dq-val.danger { color: var(--red); }
+  .dq-item .dq-val.ok { color: var(--green); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 80px 20px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    gap: 12px;
+  }
+  .empty-state .es-icon { font-size: 40px; opacity: .4; }
+
+  /* ── LOADING ── */
+  #loading {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 60vh;
+    flex-direction: column; gap: 16px;
+  }
+  .spinner {
+    width: 32px; height: 32px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── GENERATED AT ── */
+  .generated-at {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .section-grid { grid-template-columns: 1fr; }
+    .section-grid.three { grid-template-columns: 1fr 1fr; }
+    .priority-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+    .priority-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">SUPPORT INTELLIGENCE</div>
+  <div class="header-right">
+    <select class="week-selector" id="weekSelector"></select>
+    <span id="genAt">—</span>
+  </div>
+</header>
+
+<main>
+  <div id="loading">
+    <div class="spinner"></div>
+    <span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">載入報告資料中…</span>
+  </div>
+
+  <div id="app" style="display:none">
+    <div class="page-title">
+      <h1 id="pageTitle">每週支援報告</h1>
+      <div class="subtitle" id="pageSubtitle"></div>
+    </div>
+
+    <div class="product-tabs" id="productTabs"></div>
+
+    <div id="productContent"></div>
+
+    <div class="generated-at" id="generatedAt"></div>
+  </div>
+</main>
+
+<script>
+let allData = null;
+let currentReport = null;
+let currentProduct = 'MAAC';
+let chartInstances = {};
+
+// ── 顏色 ──────────────────────────────────────────────────────────────────────
+const COLORS = {
+  MAAC: '#4f8ef7',
+  CAAC: '#7c5df8',
+  DAAC: '#2dd4a0',
+  priority: { 'P0':'#f75c5c', 'P1':'#f7a84f', 'P2~P4':'#4f8ef7', '(Empty)':'#5a6380' },
+  resolve: ['#4f8ef7','#7c5df8','#2dd4a0','#f7a84f','#f75c5c','#a78bfa'],
+};
+
+function pctColor(v) {
+  if (v === null) return '#5a6380';
+  if (v > 20) return '#f75c5c';
+  if (v > 5)  return '#f7a84f';
+  return '#2dd4a0';
+}
+
+// ── WoW helper ────────────────────────────────────────────────────────────────
+function wowHtml(wow, invertColor = false) {
+  if (!wow) return '';
+  const { delta, pct, prev } = wow;
+  const isUp = delta > 0;
+  let cls = 'neutral';
+  if (delta !== 0) {
+    cls = (isUp !== invertColor) ? 'up' : 'down';
+  }
+  const sign = delta > 0 ? '+' : '';
+  const pctStr = pct !== null ? ` (${delta > 0 ? '+' : ''}${pct}%)` : ' (N/A)';
+  return `<span class="delta ${cls}">${sign}${delta}${pctStr}</span> <span class="prev">vs 上週 ${prev}</span>`;
+}
+
+// ── Load data ─────────────────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    // Try history first for week switching
+    const hResp = await fetch('data/history.json?t=' + Date.now());
+    if (hResp.ok) {
+      allData = await hResp.json();
+    } else {
+      const lResp = await fetch('data/latest.json?t=' + Date.now());
+      allData = [await lResp.json()];
+    }
+  } catch(e) {
+    // Fallback: just try latest
+    try {
+      const lResp = await fetch('data/latest.json?t=' + Date.now());
+      allData = [await lResp.json()];
+    } catch(e2) {
+      document.getElementById('loading').innerHTML =
+        '<div class="empty-state"><div class="es-icon">⚠</div><div>無法載入報告資料</div></div>';
+      return;
+    }
+  }
+
+  populateWeekSelector();
+  selectWeek(0);
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+function populateWeekSelector() {
+  const sel = document.getElementById('weekSelector');
+  sel.innerHTML = '';
+  allData.forEach((d, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${d.week_start} ～ ${d.week_end}`;
+    sel.appendChild(opt);
+  });
+  sel.addEventListener('change', () => selectWeek(parseInt(sel.value)));
+}
+
+function selectWeek(idx) {
+  currentReport = allData[idx];
+  document.getElementById('pageTitle').textContent = `每週支援報告`;
+  document.getElementById('pageSubtitle').textContent =
+    `報告週期：${currentReport.week_start} ～ ${currentReport.week_end}`;
+  document.getElementById('generatedAt').textContent =
+    `報告產生時間：${currentReport.generated_at}`;
+  renderTabs();
+  renderProduct(currentProduct);
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+function renderTabs() {
+  const container = document.getElementById('productTabs');
+  container.innerHTML = ['MAAC','CAAC','DAAC'].map(p => `
+    <button class="tab-btn ${p === currentProduct ? 'active' : ''}"
+      data-product="${p}" onclick="switchProduct('${p}')">${p}</button>
+  `).join('');
+}
+
+function switchProduct(p) {
+  currentProduct = p;
+  renderTabs();
+  renderProduct(p);
+}
+
+// ── Destroy old charts ────────────────────────────────────────────────────────
+function destroyCharts() {
+  Object.values(chartInstances).forEach(c => c.destroy());
+  chartInstances = {};
+}
+
+// ── Main render ───────────────────────────────────────────────────────────────
+function renderProduct(product) {
+  destroyCharts();
+  const data = currentReport.products[product];
+  const container = document.getElementById('productContent');
+  const color = COLORS[product];
+
+  if (!data || data.empty) {
+    container.innerHTML = `<div class="empty-state">
+      <div class="es-icon">📭</div>
+      <div>本期間無 ${product} Issue Tickets 資料</div>
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = `
+    ${renderRiskBanner(data)}
+    ${renderKPIs(data, color)}
+    <div class="section-grid">
+      ${renderResolveTypeDone(data, color)}
+      ${renderResolveTypeBacklog(data, color)}
+    </div>
+    <div class="section-grid">
+      ${renderPriorityDist(data, color)}
+      ${renderNewFeature(data, color)}
+    </div>
+    <div class="section-grid">
+      ${renderFeatureHotspot(data, color)}
+      ${renderDataQuality(data)}
+    </div>
+  `;
+
+  // Render charts after DOM is ready
+  setTimeout(() => {
+    renderResolveChart('chartResolveDone', data.resolve_analysis.done.breakdown, color);
+    renderResolveChart('chartResolveBacklog', data.resolve_analysis.backlog.breakdown, color);
+    renderPriorityChart('chartPriority', data.priority_distribution, color);
+    renderNewFeatureChart('chartNF', data.new_feature_impact, color);
+  }, 50);
+}
+
+// ── Risk Banner ───────────────────────────────────────────────────────────────
+function renderRiskBanner(data) {
+  const rf = data.risk_flags;
+  if (!rf.any) return '';
+  const flags = [];
+  if (rf.empty_resolve_type) flags.push('空值 Resolve Type > 20%');
+  if (rf.single_feature_backlog) flags.push('單一 Feature 積壓 > 30%');
+  if (rf.p1_backlog_increase) flags.push('P1 積壓週環比上升');
+  if (rf.consecutive_created_gt_completed) flags.push('連續兩週新增 > 完成');
+  return `<div class="risk-banner">
+    <div class="risk-icon">🔴</div>
+    <div>
+      <div class="risk-title">結構性風險警示</div>
+      <div class="risk-items">${flags.map(f => `<span class="risk-chip">${f}</span>`).join('')}</div>
+    </div>
+  </div>`;
+}
+
+// ── KPI Cards ─────────────────────────────────────────────────────────────────
+function renderKPIs(data, color) {
+  const ov = data.overview;
+  return `<div class="kpi-grid">
+    <div class="kpi-card created">
+      <div class="kpi-label">本週新增工單</div>
+      <div class="kpi-value">${ov.created.cur}</div>
+      <div class="kpi-wow">${wowHtml(ov.created)}</div>
+    </div>
+    <div class="kpi-card completed">
+      <div class="kpi-label">本週完成工單</div>
+      <div class="kpi-value">${ov.completed.cur}</div>
+      <div class="kpi-wow">${wowHtml(ov.completed, true)}</div>
+    </div>
+    <div class="kpi-card backlog">
+      <div class="kpi-label">積壓工單數</div>
+      <div class="kpi-value">${ov.backlog.cur}</div>
+      <div class="kpi-wow">${wowHtml(ov.backlog)}</div>
+    </div>
+  </div>`;
+}
+
+// ── Resolve Type Done ─────────────────────────────────────────────────────────
+function renderResolveTypeDone(data, color) {
+  const done = data.resolve_analysis.done;
+  const rows = done.breakdown.map((b, i) => {
+    const c = COLORS.resolve[i % COLORS.resolve.length];
+    const flag = b.flag_dominant ? '🚩' : '';
+    return `<div class="bar-row">
+      <div class="bar-label">${flag}${b.resolve_type}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${b.pct}%;background:${c}"></div></div>
+      <div class="bar-count">${b.count}</div>
+      <div class="bar-pct">${b.pct}%</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="card">
+    <div class="card-title">Resolve Type — 已完成 <span class="badge">${done.total}</span></div>
+    <div class="chart-wrap" style="height:180px"><canvas id="chartResolveDone"></canvas></div>
+    <div class="bar-table" style="margin-top:12px">${rows}</div>
+  </div>`;
+}
+
+// ── Resolve Type Backlog ───────────────────────────────────────────────────────
+function renderResolveTypeBacklog(data, color) {
+  const bl = data.resolve_analysis.backlog;
+  const rows = bl.breakdown.map((b, i) => {
+    const c = b.flag_empty_risk ? '#f75c5c' : COLORS.resolve[i % COLORS.resolve.length];
+    const flag = b.flag_empty_risk ? '🔴' : '';
+    return `<div class="bar-row">
+      <div class="bar-label">${flag}${b.resolve_type}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${b.pct}%;background:${c}"></div></div>
+      <div class="bar-count">${b.count}</div>
+      <div class="bar-pct">${b.pct}%</div>
+    </div>`;
+  }).join('');
+
+  const top3 = bl.top3_features.map(f =>
+    `<span class="feature-chip"><span>${f.feature || '(Empty)'}</span><span class="chip-count">${f.count}</span></span>`
+  ).join('');
+
+  return `<div class="card">
+    <div class="card-title">Resolve Type — 積壓未解決 <span class="badge">${bl.total}</span></div>
+    <div class="chart-wrap" style="height:180px"><canvas id="chartResolveBacklog"></canvas></div>
+    <div class="bar-table" style="margin-top:12px">${rows}</div>
+    ${bl.top3_features.length ? `<div style="margin-top:14px"><div class="card-title" style="margin-bottom:8px">積壓 Top 3 Feature</div><div class="feature-list">${top3}</div></div>` : ''}
+  </div>`;
+}
+
+// ── Priority ──────────────────────────────────────────────────────────────────
+function renderPriorityDist(data, color) {
+  const dist = data.priority_distribution;
+  const blocks = dist.map(p => {
+    const c = COLORS.priority[p.priority] || '#5a6380';
+    const flag = p.flag_p1_backlog_increase ? '🔴' : '';
+    const wow = p.wow;
+    const sign = wow.delta > 0 ? '+' : '';
+    const pctStr = wow.pct !== null ? `${sign}${wow.pct}%` : 'N/A';
+    const wowColor = wow.delta > 0 ? '#f75c5c' : wow.delta < 0 ? '#2dd4a0' : '#5a6380';
+    return `<div class="priority-block">
+      <div class="p-label" style="color:${c}">${flag}${p.priority}</div>
+      <div class="p-count" style="color:${c}">${p.count}</div>
+      <div class="p-pct">${p.pct}%</div>
+      <div class="p-wow" style="color:${wowColor}">${sign}${wow.delta} WoW</div>
+    </div>`;
+  }).join('');
+
+  // High priority features
+  const highP = dist.filter(p => ['P0','P1'].includes(p.priority) && p.features.length > 0);
+  const featHtml = highP.map(p => {
+    const c = COLORS.priority[p.priority];
+    return p.features.map(f =>
+      `<span class="feature-chip" style="border-color:${c}30;color:${c}">
+        <span style="color:var(--muted);font-size:10px">${p.priority}</span>
+        <span>${f.name || '(Empty)'}</span>
+        <span class="chip-count">${f.count}</span>
+      </span>`
+    ).join('');
+  }).join('');
+
+  return `<div class="card">
+    <div class="card-title">優先級分佈 — 本週新增工單</div>
+    <div class="priority-grid">${blocks}</div>
+    <div class="chart-wrap" style="height:160px"><canvas id="chartPriority"></canvas></div>
+    ${featHtml ? `<div style="margin-top:14px"><div class="card-title" style="margin-bottom:8px">高優先級 Feature</div><div class="feature-list">${featHtml}</div></div>` : ''}
+  </div>`;
+}
+
+// ── New Feature ───────────────────────────────────────────────────────────────
+function renderNewFeature(data, color) {
+  const dist = data.new_feature_impact;
+  const nfColors = { 'Yes': '#2dd4a0', 'No': '#4f8ef7', '(Empty)': '#5a6380' };
+  const rows = dist.map(n => {
+    const c = nfColors[n.value] || '#5a6380';
+    return `<div class="bar-row">
+      <div class="bar-label" style="color:${c}">${n.value}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${n.pct}%;background:${c}"></div></div>
+      <div class="bar-count">${n.count}</div>
+      <div class="bar-pct">${n.pct}%</div>
+    </div>`;
+  }).join('');
+
+  const yes = dist.find(n => n.value === 'Yes');
+  let releaseRiskHtml = '';
+  if (yes && yes.detail && yes.detail.release_risk) {
+    releaseRiskHtml = `<div class="risk-chip" style="margin-top:10px;display:inline-block">🔴 Release Risk：新功能包含 P0/P1 工單</div>`;
+  }
+
+  return `<div class="card">
+    <div class="card-title">新功能影響 — 本週已完成工單</div>
+    <div class="chart-wrap" style="height:160px"><canvas id="chartNF"></canvas></div>
+    <div class="bar-table" style="margin-top:12px">${rows}</div>
+    ${releaseRiskHtml}
+  </div>`;
+}
+
+// ── Feature Hotspot ────────────────────────────────────────────────────────────
+function renderFeatureHotspot(data, color) {
+  const hs = data.feature_hotspot;
+  const topCreated = hs.top_created.map(f => {
+    const gapColor = f.gap > 3 ? '#f75c5c' : f.gap > 0 ? '#f7a84f' : '#2dd4a0';
+    return `<div class="bar-row">
+      <div class="bar-label">${f.feature || '(Empty)'}</div>
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted)">
+        缺口 <span style="color:${gapColor}">${f.gap > 0 ? '+' : ''}${f.gap}</span>
+      </div>
+      <div class="bar-count">${f.count}</div>
+      <div class="bar-pct">積壓${f.backlog}</div>
+    </div>`;
+  }).join('');
+
+  const tripleRisk = hs.triple_risk_features.length > 0
+    ? `<div style="margin-top:14px">
+        <div class="card-title" style="margin-bottom:8px;color:#f75c5c">🚩 三重風險 Feature</div>
+        <div class="feature-list">${hs.triple_risk_features.map(f =>
+          `<span class="feature-chip risk">${f}</span>`).join('')}</div>
+      </div>`
+    : '';
+
+  const blConc = hs.backlog_concentration.map(f =>
+    `<div class="bar-row">
+      <div class="bar-label">${f.feature || '(Empty)'}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${f.pct}%;background:#f7a84f"></div></div>
+      <div class="bar-count">${f.count}</div>
+      <div class="bar-pct">${f.pct}%</div>
+    </div>`
+  ).join('');
+
+  return `<div class="card">
+    <div class="card-title">Feature 熱點趨勢</div>
+    <div style="margin-bottom:14px">
+      <div class="card-title" style="margin-bottom:8px">新增最多 Top 5</div>
+      <div class="bar-table">${topCreated}</div>
+    </div>
+    ${hs.backlog_concentration.length ? `<div>
+      <div class="card-title" style="margin-bottom:8px">積壓集中度</div>
+      <div class="bar-table">${blConc}</div>
+    </div>` : ''}
+    ${tripleRisk}
+  </div>`;
+}
+
+// ── Data Quality ───────────────────────────────────────────────────────────────
+function renderDataQuality(data) {
+  const dq = data.data_quality;
+  function qClass(pct) { return pct > 30 ? 'danger' : pct > 10 ? 'warn' : 'ok'; }
+  function qVal(v, suffix='%') { return `<span class="dq-val ${qClass(v)}">${v}${suffix}</span>`; }
+
+  return `<div class="card">
+    <div class="card-title">⚠ 資料品質</div>
+    <div class="dq-grid">
+      <div class="dq-item"><span class="dq-label">完成早於建立</span>${dq.invalid_dates > 0 ? `<span class="dq-val danger">${dq.invalid_dates} 筆</span>` : `<span class="dq-val ok">0</span>`}</div>
+      <div class="dq-item"><span class="dq-label">Priority 空值</span>${qVal(dq.null_priority_pct)}</div>
+      <div class="dq-item"><span class="dq-label">Feature 空值</span>${qVal(dq.null_feature_pct)}</div>
+      <div class="dq-item"><span class="dq-label">Resolve Type 空值</span>${qVal(dq.null_resolve_type_pct)}</div>
+      <div class="dq-item"><span class="dq-label">New Feature 空值</span>${qVal(dq.null_new_feature_pct)}</div>
+    </div>
+  </div>`;
+}
+
+// ── Charts ─────────────────────────────────────────────────────────────────────
+Chart.defaults.color = '#5a6380';
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 11;
+
+function renderResolveChart(id, breakdown, color) {
+  const canvas = document.getElementById(id);
+  if (!canvas || !breakdown.length) return;
+  const labels = breakdown.map(b => b.resolve_type);
+  const data   = breakdown.map(b => b.count);
+  const colors = breakdown.map((_, i) => COLORS.resolve[i % COLORS.resolve.length]);
+
+  chartInstances[id] = new Chart(canvas, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{ data, backgroundColor: colors, borderWidth: 0, hoverOffset: 6 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { boxWidth: 10, padding: 10, font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}` } }
+      },
+      cutout: '65%'
+    }
+  });
+}
+
+function renderPriorityChart(id, dist, color) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const labels = dist.map(p => p.priority);
+  const cur    = dist.map(p => p.count);
+  const prev   = dist.map(p => p.wow.prev);
+  const colors = dist.map(p => COLORS.priority[p.priority] || '#5a6380');
+
+  chartInstances[id] = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: '本週', data: cur, backgroundColor: colors, borderRadius: 4, barPercentage: .5 },
+        { label: '上週', data: prev, backgroundColor: colors.map(c => c + '40'), borderRadius: 4, barPercentage: .5 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { boxWidth: 10, padding: 12 } } },
+      scales: {
+        x: { grid: { color: '#1e2330' } },
+        y: { grid: { color: '#1e2330' }, beginAtZero: true, ticks: { stepSize: 1 } }
+      }
+    }
+  });
+}
+
+function renderNewFeatureChart(id, dist, color) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const nfColors = { 'Yes': '#2dd4a0', 'No': '#4f8ef7', '(Empty)': '#5a6380' };
+  chartInstances[id] = new Chart(canvas, {
+    type: 'doughnut',
+    data: {
+      labels: dist.map(n => n.value),
+      datasets: [{
+        data: dist.map(n => n.count),
+        backgroundColor: dist.map(n => nfColors[n.value] || '#5a6380'),
+        borderWidth: 0, hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { boxWidth: 10, padding: 10, font: { size: 11 } } }
+      },
+      cutout: '65%'
+    }
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
