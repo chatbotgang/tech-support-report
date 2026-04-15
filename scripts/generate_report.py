@@ -93,10 +93,10 @@ def query_via_rest(start_utc, end_utc):
     # Fetch all Issue Tickets then filter in Python
     url = f"{SUPABASE_URL}/rest/v1/task_state"
     params = {
-        'select': 'id,name,ticket_created_at,ticket_completed_at,ai_summary,assignee_name,custom_fields',
-        'name': 'ilike.*Issue Ticket*',
-        'limit': 10000
-    }
+    'select': 'id,name,ticket_created_at,ticket_completed_at,ai_summary,assignee_name,custom_fields',
+    'name': 'ilike.%Issue Ticket%',
+    'limit': 10000
+}
     resp = requests.get(url, headers=HEADERS, params=params)
     resp.raise_for_status()
     rows = resp.json()
