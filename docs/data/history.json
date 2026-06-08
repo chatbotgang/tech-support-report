@@ -1,5 +1,1478 @@
 [
   {
+    "generated_at": "2026-06-08T12:38:09.937882+08:00",
+    "report_date": "2026-06-07",
+    "week_start": "2026-06-01",
+    "week_end": "2026-06-07",
+    "products": {
+      "MAAC": {
+        "empty": false,
+        "product": "MAAC",
+        "overview": {
+          "created": {
+            "cur": 23,
+            "prev": 26,
+            "delta": -3,
+            "pct": -11.5
+          },
+          "completed": {
+            "cur": 15,
+            "prev": 30,
+            "delta": -15,
+            "pct": -50.0
+          },
+          "backlog": {
+            "cur": 49,
+            "prev": 41,
+            "delta": 8,
+            "pct": 19.5
+          }
+        },
+        "resolve_analysis": {
+          "done": {
+            "total": 15,
+            "breakdown": [
+              {
+                "resolve_type": "(Empty)",
+                "count": 0,
+                "pct": 0.0,
+                "wow": {
+                  "cur": 0,
+                  "prev": 1,
+                  "delta": -1,
+                  "pct": -100.0
+                },
+                "flag_dominant": false,
+                "features": []
+              },
+              {
+                "resolve_type": "Fix problems",
+                "count": 8,
+                "pct": 53.3,
+                "wow": {
+                  "cur": 8,
+                  "prev": 10,
+                  "delta": -2,
+                  "pct": -20.0
+                },
+                "flag_dominant": true,
+                "features": [
+                  {
+                    "name": "MAAC-Richmenu",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Customer Journey",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Prize management",
+                    "count": 1
+                  },
+                  {
+                    "name": "SDK",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Segment",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Inform",
+                "count": 1,
+                "pct": 6.7,
+                "wow": {
+                  "cur": 1,
+                  "prev": 2,
+                  "delta": -1,
+                  "pct": -50.0
+                },
+                "flag_dominant": false,
+                "features": [
+                  {
+                    "name": "MAAC-Richmenu",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Not-to-resolve",
+                "count": 0,
+                "pct": 0.0,
+                "wow": {
+                  "cur": 0,
+                  "prev": 1,
+                  "delta": -1,
+                  "pct": -100.0
+                },
+                "flag_dominant": false,
+                "features": []
+              },
+              {
+                "resolve_type": "Product Optimization",
+                "count": 0,
+                "pct": 0.0,
+                "wow": {
+                  "cur": 0,
+                  "prev": 1,
+                  "delta": -1,
+                  "pct": -100.0
+                },
+                "flag_dominant": false,
+                "features": []
+              },
+              {
+                "resolve_type": "Self-serve",
+                "count": 6,
+                "pct": 40.0,
+                "wow": {
+                  "cur": 6,
+                  "prev": 15,
+                  "delta": -9,
+                  "pct": -60.0
+                },
+                "flag_dominant": true,
+                "features": [
+                  {
+                    "name": "MAAC-Customer Journey",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-SMS Broadcast",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Tag",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-SMS+ API",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Others",
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "backlog": {
+            "total": 49,
+            "breakdown": [
+              {
+                "resolve_type": "(Empty)",
+                "count": 28,
+                "pct": 57.1,
+                "wow": {
+                  "cur": 28,
+                  "prev": 21,
+                  "delta": 7,
+                  "pct": 33.3
+                },
+                "flag_empty_risk": true,
+                "features": [
+                  {
+                    "name": "MAAC-Auto reply",
+                    "count": 1
+                  },
+                  {
+                    "name": "SDK",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Customer Journey",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Website Widget/SRT",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Fix problems",
+                "count": 7,
+                "pct": 14.3,
+                "wow": {
+                  "cur": 7,
+                  "prev": 5,
+                  "delta": 2,
+                  "pct": 40.0
+                },
+                "flag_empty_risk": false,
+                "features": [
+                  {
+                    "name": "MAAC-Richmenu",
+                    "count": 2
+                  },
+                  {
+                    "name": "MAAC-Auto reply",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Segment",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Insight",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Editor",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Inform",
+                "count": 1,
+                "pct": 2.0,
+                "wow": {
+                  "cur": 1,
+                  "prev": 2,
+                  "delta": -1,
+                  "pct": -50.0
+                },
+                "flag_empty_risk": false,
+                "features": [
+                  {
+                    "name": "MAAC-SMS+ API",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Not-to-resolve",
+                "count": 2,
+                "pct": 4.1,
+                "wow": {
+                  "cur": 2,
+                  "prev": 2,
+                  "delta": 0,
+                  "pct": 0.0
+                },
+                "flag_empty_risk": false,
+                "features": [
+                  {
+                    "name": "MAAC-Prize management",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Bindlink Template",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Self-serve",
+                "count": 9,
+                "pct": 18.4,
+                "wow": {
+                  "cur": 9,
+                  "prev": 10,
+                  "delta": -1,
+                  "pct": -10.0
+                },
+                "flag_empty_risk": false,
+                "features": [
+                  {
+                    "name": "MAAC-Contact",
+                    "count": 2
+                  },
+                  {
+                    "name": "MAAC-Deeplink",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Retargeting",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Bindlink Template",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-Prize management",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Task-Ticket",
+                "count": 2,
+                "pct": 4.1,
+                "wow": {
+                  "cur": 2,
+                  "prev": 1,
+                  "delta": 1,
+                  "pct": 100.0
+                },
+                "flag_empty_risk": false,
+                "features": [
+                  {
+                    "name": "MAAC-Channels",
+                    "count": 1
+                  },
+                  {
+                    "name": "MAAC-account",
+                    "count": 1
+                  }
+                ]
+              }
+            ],
+            "top3_features": [
+              {
+                "feature": "(Empty)",
+                "count": 24
+              },
+              {
+                "feature": "MAAC-Richmenu",
+                "count": 3
+              },
+              {
+                "feature": "MAAC-Contact",
+                "count": 2
+              }
+            ]
+          }
+        },
+        "priority_distribution": [
+          {
+            "priority": "P0",
+            "count": 0,
+            "pct": 0.0,
+            "wow": {
+              "cur": 0,
+              "prev": 0,
+              "delta": 0,
+              "pct": null
+            },
+            "features": [],
+            "flag_p1_backlog_increase": false
+          },
+          {
+            "priority": "P1",
+            "count": 3,
+            "pct": 13.0,
+            "wow": {
+              "cur": 3,
+              "prev": 4,
+              "delta": -1,
+              "pct": -25.0
+            },
+            "features": [
+              {
+                "name": "MAAC-Insight",
+                "count": 1
+              },
+              {
+                "name": "MAAC-Segment",
+                "count": 1
+              }
+            ],
+            "flag_p1_backlog_increase": true
+          },
+          {
+            "priority": "P2~P4",
+            "count": 15,
+            "pct": 65.2,
+            "wow": {
+              "cur": 15,
+              "prev": 21,
+              "delta": -6,
+              "pct": -28.6
+            },
+            "features": [],
+            "flag_p1_backlog_increase": false
+          },
+          {
+            "priority": "(Empty)",
+            "count": 0,
+            "pct": 0.0,
+            "wow": {
+              "cur": 0,
+              "prev": 0,
+              "delta": 0,
+              "pct": null
+            },
+            "features": [],
+            "flag_p1_backlog_increase": false
+          }
+        ],
+        "new_feature_impact": [
+          {
+            "value": "Yes",
+            "count": 1,
+            "pct": 6.7,
+            "wow": {
+              "cur": 1,
+              "prev": 3,
+              "delta": -2,
+              "pct": -66.7
+            },
+            "detail": {
+              "by_priority": [
+                {
+                  "priority": "P1",
+                  "count": 1
+                }
+              ],
+              "by_feature": [
+                {
+                  "feature": "MAAC-Segment",
+                  "count": 1
+                }
+              ],
+              "release_risk": true
+            }
+          },
+          {
+            "value": "No",
+            "count": 13,
+            "pct": 86.7,
+            "wow": {
+              "cur": 13,
+              "prev": 25,
+              "delta": -12,
+              "pct": -48.0
+            },
+            "detail": []
+          },
+          {
+            "value": "(Empty)",
+            "count": 1,
+            "pct": 6.7,
+            "wow": {
+              "cur": 1,
+              "prev": 2,
+              "delta": -1,
+              "pct": -50.0
+            },
+            "detail": []
+          }
+        ],
+        "feature_hotspot": {
+          "top_created": [
+            {
+              "feature": "MAAC-SMS+ API",
+              "count": 2,
+              "wow": {
+                "cur": 2,
+                "prev": 3,
+                "delta": -1,
+                "pct": -33.3
+              },
+              "gap": 0,
+              "backlog": 1
+            },
+            {
+              "feature": "MAAC-account",
+              "count": 2,
+              "wow": {
+                "cur": 2,
+                "prev": 0,
+                "delta": 2,
+                "pct": null
+              },
+              "gap": 1,
+              "backlog": 1
+            },
+            {
+              "feature": "MAAC-Insight",
+              "count": 1,
+              "wow": {
+                "cur": 1,
+                "prev": 2,
+                "delta": -1,
+                "pct": -50.0
+              },
+              "gap": 1,
+              "backlog": 1
+            },
+            {
+              "feature": "MAAC-SMS Broadcast",
+              "count": 1,
+              "wow": {
+                "cur": 1,
+                "prev": 1,
+                "delta": 0,
+                "pct": 0.0
+              },
+              "gap": 0,
+              "backlog": 0
+            },
+            {
+              "feature": "MAAC-Richmenu",
+              "count": 1,
+              "wow": {
+                "cur": 1,
+                "prev": 3,
+                "delta": -2,
+                "pct": -66.7
+              },
+              "gap": -1,
+              "backlog": 3
+            }
+          ],
+          "top_completed": [
+            {
+              "feature": "MAAC-Richmenu",
+              "count": 2
+            },
+            {
+              "feature": "MAAC-Customer Journey",
+              "count": 2
+            },
+            {
+              "feature": "MAAC-SMS+ API",
+              "count": 2
+            },
+            {
+              "feature": "MAAC-SMS Broadcast",
+              "count": 1
+            },
+            {
+              "feature": "MAAC-Prize management",
+              "count": 1
+            }
+          ],
+          "backlog_concentration": [
+            {
+              "feature": "MAAC-Richmenu",
+              "count": 3,
+              "pct": 6.1
+            },
+            {
+              "feature": "MAAC-Contact",
+              "count": 2,
+              "pct": 4.1
+            },
+            {
+              "feature": "MAAC-Auto reply",
+              "count": 2,
+              "pct": 4.1
+            }
+          ],
+          "triple_risk_features": []
+        },
+        "data_quality": {
+          "invalid_dates": 0,
+          "null_priority_pct": 20.3,
+          "null_feature_pct": 37.5,
+          "null_resolve_type_pct": 43.8,
+          "null_new_feature_pct": 43.8
+        },
+        "risk_flags": {
+          "empty_resolve_type": true,
+          "single_feature_backlog": false,
+          "p1_backlog_increase": true,
+          "consecutive_created_gt_completed": false,
+          "any": true
+        },
+        "ai_insight": {
+          "stability_risk": "高風險。本週新增23件工單但完成率僅65%（15/23），積壓達49件，顯示處理能力不足。關鍵系統故障包括：time_delay節點處理量斷崖式下降導致42,250筆旅程卡住、LINE儀表板數據缺失5天、標籤同步失效、富文本菜單綁定被第三方系統干預。多個故障涉及核心功能，需立即關注。",
+          "workload_structure": "工單類型分布不均：資料同步問題（MAAC-CAAC同步延遲、標籤不同步）、自動化流程故障（旅程觸發失敗、time_delay節點堵塞）、第三方整合問題（Omnichat干預、CDH同步）、客戶操作錯誤（匯入格式、API呼叫格式、權限設定）各佔一定比例。約30%問題源於客戶配置不當，70%為系統缺陷或設計問題。",
+          "release_quality": "中等偏低。2026-05-25部署導致time_delay節點故障、Gemini預覽模型改變致AI分眾功能失效，顯示上游依賴管理薄弱。Web Widget 1.0的z-index動態掃描機制設計不當導致層疊衝突。字型堆疊未考慮多語言支援。部分功能（PNP module）預設未開啟增加客戶困惑。",
+          "backlog_health": "警告狀態。積壓率達68%（49/72）遠超健康水位。新增速度（23件/週）已超過完成速度（15件/週），表明積壓會持續擴大。問題涵蓋多個系統模組，非單點故障，需要跨部門協調資源解決。完成時間跨度長（涉及ProductOps、Engineering、CSM多輪檢視），流程效率待提升。",
+          "escalation_risk": "高。涉及資料遺失風險（儀表板數據缺失）、核心流程堵塞（42,250筆旅程卡住）、第三方系統干預（Omnichat）、客戶收益影響（發券失敗、標籤貼標失敗）。部分問題根因複雜（time_delay、旅程觸發排程演算法），單靠現有團隊診斷困難。至少3個工單未完整釐清問題（任務描述為空或undefined）。",
+          "emerging_risk": "1.第三方整合脆弱性：Omnichat無通知的後台干預客戶圖文菜單，CDH同步延遲超過1天，需建立整合監控機制。2.多語言支援缺陷：日文字型問題暴露國際化考慮不周。3.API規範執行鬆散：客戶提供格式錯誤的URI時系統靜默失敗，缺乏校驗提示。4.安裝檢查工具故障：IPv6處理錯誤影響客戶信任。5.權限同步歷史遺留：帳號建立時資料未同步至Logto系統。",
+          "action_items": [
+            "立即成立虛擬工作小組處理time_delay節點故障和42,250筆卡住旅程，確認2026-05-25部署的具體變更並進行回滾/修復評估，目標72小時內恢復",
+            "強化第三方整合監控：建立Omnichat行為白名單、webhook轉發日誌審計、CDH同步SLA監控（目標≤5分鐘），並與第三方廠商確認預期行為",
+            "建立工單品質門檻：要求所有新工單必填詳細問題描述、預期行為、實際結果，禁止空白或undefined狀態進入處理流程，減少根因分析迴圈",
+            "優化工單完成流程：當前積壓率68%趨勢惡化，建議優先完成影響核心功能的高優先級工單（資料同步、旅程故障），非客戶操作錯誤類可轉移至知識庫自助化",
+            "進行2026-05-21至05-30期間全系統稽核：檢查Airflow排程器、Gemini模型版本控制、API版本相容性等，建立變更管理與相容性測試機制",
+            "執行客戶配置教育計劃：針對匯入格式、PNP module開啟、API呼叫規範等高頻問題製作互動式導引，減少重複工單進而釋放團隊容量"
+          ]
+        }
+      },
+      "CAAC": {
+        "empty": false,
+        "product": "CAAC",
+        "overview": {
+          "created": {
+            "cur": 10,
+            "prev": 10,
+            "delta": 0,
+            "pct": 0.0
+          },
+          "completed": {
+            "cur": 7,
+            "prev": 7,
+            "delta": 0,
+            "pct": 0.0
+          },
+          "backlog": {
+            "cur": 19,
+            "prev": 16,
+            "delta": 3,
+            "pct": 18.8
+          }
+        },
+        "resolve_analysis": {
+          "done": {
+            "total": 7,
+            "breakdown": [
+              {
+                "resolve_type": "Fix problems",
+                "count": 2,
+                "pct": 28.6,
+                "wow": {
+                  "cur": 2,
+                  "prev": 3,
+                  "delta": -1,
+                  "pct": -33.3
+                },
+                "flag_dominant": false,
+                "features": [
+                  {
+                    "name": "CAAC-Chat list",
+                    "count": 2
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Inform",
+                "count": 2,
+                "pct": 28.6,
+                "wow": {
+                  "cur": 2,
+                  "prev": 0,
+                  "delta": 2,
+                  "pct": null
+                },
+                "flag_dominant": false,
+                "features": [
+                  {
+                    "name": "CAAC-App",
+                    "count": 1
+                  },
+                  {
+                    "name": "CAAC-AI",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Not-to-resolve",
+                "count": 1,
+                "pct": 14.3,
+                "wow": {
+                  "cur": 1,
+                  "prev": 0,
+                  "delta": 1,
+                  "pct": null
+                },
+                "flag_dominant": false,
+                "features": [
+                  {
+                    "name": "CAAC-Chat room",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Self-serve",
+                "count": 1,
+                "pct": 14.3,
+                "wow": {
+                  "cur": 1,
+                  "prev": 4,
+                  "delta": -3,
+                  "pct": -75.0
+                },
+                "flag_dominant": false,
+                "features": [
+                  {
+                    "name": "CAAC-Channels",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Task-Ticket",
+                "count": 1,
+                "pct": 14.3,
+                "wow": {
+                  "cur": 1,
+                  "prev": 0,
+                  "delta": 1,
+                  "pct": null
+                },
+                "flag_dominant": false,
+                "features": [
+                  {
+                    "name": "CAAC-Channels",
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "backlog": {
+            "total": 19,
+            "breakdown": [
+              {
+                "resolve_type": "(Empty)",
+                "count": 7,
+                "pct": 36.8,
+                "wow": {
+                  "cur": 7,
+                  "prev": 4,
+                  "delta": 3,
+                  "pct": 75.0
+                },
+                "flag_empty_risk": true,
+                "features": [
+                  {
+                    "name": "CAAC-Users",
+                    "count": 1
+                  },
+                  {
+                    "name": "CAAC-Notification",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Fix problems",
+                "count": 6,
+                "pct": 31.6,
+                "wow": {
+                  "cur": 6,
+                  "prev": 5,
+                  "delta": 1,
+                  "pct": 20.0
+                },
+                "flag_empty_risk": false,
+                "features": [
+                  {
+                    "name": "CAAC-Chat list",
+                    "count": 1
+                  },
+                  {
+                    "name": "CAAC-App",
+                    "count": 1
+                  },
+                  {
+                    "name": "CAAC-Product feed",
+                    "count": 1
+                  },
+                  {
+                    "name": "CAAC-Insights",
+                    "count": 1
+                  },
+                  {
+                    "name": "CAAC-Contacts",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Inform",
+                "count": 0,
+                "pct": 0.0,
+                "wow": {
+                  "cur": 0,
+                  "prev": 2,
+                  "delta": -2,
+                  "pct": -100.0
+                },
+                "flag_empty_risk": false,
+                "features": []
+              },
+              {
+                "resolve_type": "Not-to-resolve",
+                "count": 0,
+                "pct": 0.0,
+                "wow": {
+                  "cur": 0,
+                  "prev": 1,
+                  "delta": -1,
+                  "pct": -100.0
+                },
+                "flag_empty_risk": false,
+                "features": []
+              },
+              {
+                "resolve_type": "Self-serve",
+                "count": 6,
+                "pct": 31.6,
+                "wow": {
+                  "cur": 6,
+                  "prev": 4,
+                  "delta": 2,
+                  "pct": 50.0
+                },
+                "flag_empty_risk": false,
+                "features": [
+                  {
+                    "name": "CAAC-Chat room",
+                    "count": 2
+                  },
+                  {
+                    "name": "CAAC-Channels",
+                    "count": 1
+                  },
+                  {
+                    "name": "CAAC-Assignment",
+                    "count": 1
+                  },
+                  {
+                    "name": "CAAC-Login",
+                    "count": 1
+                  },
+                  {
+                    "name": "CAAC-Notification",
+                    "count": 1
+                  }
+                ]
+              }
+            ],
+            "top3_features": [
+              {
+                "feature": "(Empty)",
+                "count": 5
+              },
+              {
+                "feature": "CAAC-Chat room",
+                "count": 3
+              },
+              {
+                "feature": "CAAC-Notification",
+                "count": 2
+              }
+            ]
+          }
+        },
+        "priority_distribution": [
+          {
+            "priority": "P0",
+            "count": 1,
+            "pct": 10.0,
+            "wow": {
+              "cur": 1,
+              "prev": 1,
+              "delta": 0,
+              "pct": 0.0
+            },
+            "features": [
+              {
+                "name": "CAAC-Chat list",
+                "count": 1
+              }
+            ],
+            "flag_p1_backlog_increase": false
+          },
+          {
+            "priority": "P1",
+            "count": 0,
+            "pct": 0.0,
+            "wow": {
+              "cur": 0,
+              "prev": 1,
+              "delta": -1,
+              "pct": -100.0
+            },
+            "features": [],
+            "flag_p1_backlog_increase": false
+          },
+          {
+            "priority": "P2~P4",
+            "count": 9,
+            "pct": 90.0,
+            "wow": {
+              "cur": 9,
+              "prev": 8,
+              "delta": 1,
+              "pct": 12.5
+            },
+            "features": [],
+            "flag_p1_backlog_increase": false
+          },
+          {
+            "priority": "(Empty)",
+            "count": 0,
+            "pct": 0.0,
+            "wow": {
+              "cur": 0,
+              "prev": 0,
+              "delta": 0,
+              "pct": null
+            },
+            "features": [],
+            "flag_p1_backlog_increase": false
+          }
+        ],
+        "new_feature_impact": [
+          {
+            "value": "Yes",
+            "count": 0,
+            "pct": 0.0,
+            "wow": {
+              "cur": 0,
+              "prev": 1,
+              "delta": -1,
+              "pct": -100.0
+            },
+            "detail": []
+          },
+          {
+            "value": "No",
+            "count": 6,
+            "pct": 85.7,
+            "wow": {
+              "cur": 6,
+              "prev": 6,
+              "delta": 0,
+              "pct": 0.0
+            },
+            "detail": []
+          },
+          {
+            "value": "(Empty)",
+            "count": 1,
+            "pct": 14.3,
+            "wow": {
+              "cur": 1,
+              "prev": 0,
+              "delta": 1,
+              "pct": null
+            },
+            "detail": []
+          }
+        ],
+        "feature_hotspot": {
+          "top_created": [
+            {
+              "feature": "CAAC-Chat room",
+              "count": 3,
+              "wow": {
+                "cur": 3,
+                "prev": 3,
+                "delta": 0,
+                "pct": 0.0
+              },
+              "gap": 2,
+              "backlog": 3
+            },
+            {
+              "feature": "CAAC-Channels",
+              "count": 2,
+              "wow": {
+                "cur": 2,
+                "prev": 0,
+                "delta": 2,
+                "pct": null
+              },
+              "gap": 0,
+              "backlog": 1
+            },
+            {
+              "feature": "CAAC-Chat list",
+              "count": 2,
+              "wow": {
+                "cur": 2,
+                "prev": 1,
+                "delta": 1,
+                "pct": 100.0
+              },
+              "gap": 0,
+              "backlog": 1
+            }
+          ],
+          "top_completed": [
+            {
+              "feature": "CAAC-Channels",
+              "count": 2
+            },
+            {
+              "feature": "CAAC-Chat list",
+              "count": 2
+            },
+            {
+              "feature": "CAAC-App",
+              "count": 1
+            },
+            {
+              "feature": "CAAC-AI",
+              "count": 1
+            },
+            {
+              "feature": "CAAC-Chat room",
+              "count": 1
+            }
+          ],
+          "backlog_concentration": [
+            {
+              "feature": "CAAC-Chat room",
+              "count": 3,
+              "pct": 15.8
+            },
+            {
+              "feature": "CAAC-Notification",
+              "count": 2,
+              "pct": 10.5
+            },
+            {
+              "feature": "CAAC-Users",
+              "count": 1,
+              "pct": 5.3
+            }
+          ],
+          "triple_risk_features": []
+        },
+        "data_quality": {
+          "invalid_dates": 0,
+          "null_priority_pct": 3.8,
+          "null_feature_pct": 19.2,
+          "null_resolve_type_pct": 26.9,
+          "null_new_feature_pct": 23.1
+        },
+        "risk_flags": {
+          "empty_resolve_type": true,
+          "single_feature_backlog": false,
+          "p1_backlog_increase": false,
+          "consecutive_created_gt_completed": true,
+          "any": true
+        },
+        "ai_insight": {
+          "stability_risk": "中度風險。本週共8筆工單摘要涵蓋多個系統層級問題：(1)存取憑證無自動刷新機制導致週期性登出；(2)下游服務CDH出現逾時與KeyError異常；(3)LINE Webhook經第三方轉發導致簽章驗證失敗；(4)UI權限控制漏洞。雖單週完成率70%但積壓19筆工單，反映系統穩定性存在隱患。",
+          "workload_structure": "技術債務與系統設計缺陷並存。問題分布包括：基礎設施層(Token刷新、Webhook轉發)、業務邏輯層(權限驗證、LINE頻道綁定)、依賴服務層(CDH異常)。多起事件涉及第三方整合問題(Aiya、Chatbase)，反映系統邊界管理薄弱。",
+          "release_quality": "存在品質管控缺口。「受限協作者可點擊Bulk Resolve」的UI漏洞表明功能權限驗證不完整；CDH v2路徑的KeyError說明程式碼保護不足；LINE簽章問題未在集成測試中發現。現有測試覆蓋未充分考慮權限邊界與第三方整合場景。",
+          "backlog_health": "背景風險升高。新增10件、完成7件、積壓19件，積壓比例達65%。工單根因涵蓋系統設計缺陷(Token機制)與環境配置問題(舊組織佔用LINE頻道)，解決周期可能較長。積壓項若包含相同根因集群，單次修復可批量消除。",
+          "escalation_risk": "高度升級風險。涉及多個客戶影響事件(MR. LIVING、org 3100)，其中LINE頻道啟用失敗因舊組織遺留配置，CDH異常導致批量對話面板錯誤。若Token登出或CDH異常再發，將直接影響客服運營。建議升級為P1監控。",
+          "emerging_risk": "系統整合架構風險浮現。(1)Token 7天固定期限缺乏自動刷新機制，易導致用戶驗證中斷；(2)LINE Webhook必須經第三方轉發，引入簽章驗證脆弱點；(3)多個組織/頻道歷史數據未清理，新開通易產生綁定衝突；(4)CDH依賴關鍵但容錯機制不足。",
+          "action_items": [
+            "優先級P0：實現存取憑證自動刷新機制(Refresh Token)或延長有效期至客服工作週期(建議30天)，降低週期性登出事件",
+            "優先級P0：新增CDH服務降級策略與超時重試機制，對會員資料載入失敗進行快速恢復而非直接回傳502",
+            "優先級P1：梳理並清理2022年遺留的舊組織/頻道綁定數據，建立新開通客戶LINE頻道的唯一性檢查流程",
+            "優先級P1：補強UI層權限驗證，對所有Bulk操作(Resolve/Delete等)實施後端二次校驗，確保受限角色無法執行",
+            "優先級P2：若保持Webhook第三方轉發架構，與Aiya建立簽章驗證的聯合測試；長期評估直連LINE的可行性",
+            "優先級P2：擴大集成測試範圍，納入權限邊界、第三方轉發、特殊字符(表情符號)等場景覆蓋",
+            "優先級P3：建立工單根因數據庫，按系統層級分類並關聯客戶使用模式，識別高風險功能組合(如舊版AI文案+新界面)"
+          ]
+        }
+      },
+      "DAAC": {
+        "empty": false,
+        "product": "DAAC",
+        "overview": {
+          "created": {
+            "cur": 4,
+            "prev": 4,
+            "delta": 0,
+            "pct": 0.0
+          },
+          "completed": {
+            "cur": 3,
+            "prev": 4,
+            "delta": -1,
+            "pct": -25.0
+          },
+          "backlog": {
+            "cur": 7,
+            "prev": 6,
+            "delta": 1,
+            "pct": 16.7
+          }
+        },
+        "resolve_analysis": {
+          "done": {
+            "total": 3,
+            "breakdown": [
+              {
+                "resolve_type": "(Empty)",
+                "count": 0,
+                "pct": 0.0,
+                "wow": {
+                  "cur": 0,
+                  "prev": 1,
+                  "delta": -1,
+                  "pct": -100.0
+                },
+                "flag_dominant": false,
+                "features": []
+              },
+              {
+                "resolve_type": "Fix problems",
+                "count": 1,
+                "pct": 33.3,
+                "wow": {
+                  "cur": 1,
+                  "prev": 0,
+                  "delta": 1,
+                  "pct": null
+                },
+                "flag_dominant": true,
+                "features": [
+                  {
+                    "name": "DAAC - EH",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Inform",
+                "count": 0,
+                "pct": 0.0,
+                "wow": {
+                  "cur": 0,
+                  "prev": 1,
+                  "delta": -1,
+                  "pct": -100.0
+                },
+                "flag_dominant": false,
+                "features": []
+              },
+              {
+                "resolve_type": "Not-to-resolve",
+                "count": 1,
+                "pct": 33.3,
+                "wow": {
+                  "cur": 1,
+                  "prev": 0,
+                  "delta": 1,
+                  "pct": null
+                },
+                "flag_dominant": true,
+                "features": [
+                  {
+                    "name": "DAAC-輔翼",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Self-serve",
+                "count": 1,
+                "pct": 33.3,
+                "wow": {
+                  "cur": 1,
+                  "prev": 2,
+                  "delta": -1,
+                  "pct": -50.0
+                },
+                "flag_dominant": true,
+                "features": [
+                  {
+                    "name": "DAAC-Cyberbiz",
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "backlog": {
+            "total": 7,
+            "breakdown": [
+              {
+                "resolve_type": "(Empty)",
+                "count": 3,
+                "pct": 42.9,
+                "wow": {
+                  "cur": 3,
+                  "prev": 2,
+                  "delta": 1,
+                  "pct": 50.0
+                },
+                "flag_empty_risk": true,
+                "features": [
+                  {
+                    "name": "DAAC-SimplyBook.me",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Inform",
+                "count": 2,
+                "pct": 28.6,
+                "wow": {
+                  "cur": 2,
+                  "prev": 1,
+                  "delta": 1,
+                  "pct": 100.0
+                },
+                "flag_empty_risk": false,
+                "features": [
+                  {
+                    "name": "DAAC-Cyberbiz",
+                    "count": 1
+                  },
+                  {
+                    "name": "DAAC-CDH",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Not-to-resolve",
+                "count": 1,
+                "pct": 14.3,
+                "wow": {
+                  "cur": 1,
+                  "prev": 1,
+                  "delta": 0,
+                  "pct": 0.0
+                },
+                "flag_empty_risk": false,
+                "features": [
+                  {
+                    "name": "DAAC-91app ",
+                    "count": 1
+                  }
+                ]
+              },
+              {
+                "resolve_type": "Self-serve",
+                "count": 1,
+                "pct": 14.3,
+                "wow": {
+                  "cur": 1,
+                  "prev": 2,
+                  "delta": -1,
+                  "pct": -50.0
+                },
+                "flag_empty_risk": false,
+                "features": [
+                  {
+                    "name": "DAAC-Cyberbiz",
+                    "count": 1
+                  }
+                ]
+              }
+            ],
+            "top3_features": [
+              {
+                "feature": "(Empty)",
+                "count": 2
+              },
+              {
+                "feature": "DAAC-Cyberbiz",
+                "count": 2
+              },
+              {
+                "feature": "DAAC-SimplyBook.me",
+                "count": 1
+              }
+            ]
+          }
+        },
+        "priority_distribution": [
+          {
+            "priority": "P0",
+            "count": 0,
+            "pct": 0.0,
+            "wow": {
+              "cur": 0,
+              "prev": 0,
+              "delta": 0,
+              "pct": null
+            },
+            "features": [],
+            "flag_p1_backlog_increase": false
+          },
+          {
+            "priority": "P1",
+            "count": 0,
+            "pct": 0.0,
+            "wow": {
+              "cur": 0,
+              "prev": 1,
+              "delta": -1,
+              "pct": -100.0
+            },
+            "features": [],
+            "flag_p1_backlog_increase": false
+          },
+          {
+            "priority": "P2~P4",
+            "count": 2,
+            "pct": 50.0,
+            "wow": {
+              "cur": 2,
+              "prev": 3,
+              "delta": -1,
+              "pct": -33.3
+            },
+            "features": [],
+            "flag_p1_backlog_increase": false
+          },
+          {
+            "priority": "(Empty)",
+            "count": 0,
+            "pct": 0.0,
+            "wow": {
+              "cur": 0,
+              "prev": 0,
+              "delta": 0,
+              "pct": null
+            },
+            "features": [],
+            "flag_p1_backlog_increase": false
+          }
+        ],
+        "new_feature_impact": [
+          {
+            "value": "Yes",
+            "count": 1,
+            "pct": 33.3,
+            "wow": {
+              "cur": 1,
+              "prev": 1,
+              "delta": 0,
+              "pct": 0.0
+            },
+            "detail": {
+              "by_priority": [
+                {
+                  "priority": "High",
+                  "count": 1
+                }
+              ],
+              "by_feature": [
+                {
+                  "feature": "DAAC - EH",
+                  "count": 1
+                }
+              ],
+              "release_risk": false
+            }
+          },
+          {
+            "value": "No",
+            "count": 2,
+            "pct": 66.7,
+            "wow": {
+              "cur": 2,
+              "prev": 2,
+              "delta": 0,
+              "pct": 0.0
+            },
+            "detail": []
+          },
+          {
+            "value": "(Empty)",
+            "count": 0,
+            "pct": 0.0,
+            "wow": {
+              "cur": 0,
+              "prev": 1,
+              "delta": -1,
+              "pct": -100.0
+            },
+            "detail": []
+          }
+        ],
+        "feature_hotspot": {
+          "top_created": [
+            {
+              "feature": "DAAC-CDH",
+              "count": 1,
+              "wow": {
+                "cur": 1,
+                "prev": 1,
+                "delta": 0,
+                "pct": 0.0
+              },
+              "gap": 1,
+              "backlog": 1
+            },
+            {
+              "feature": "DAAC-輔翼",
+              "count": 1,
+              "wow": {
+                "cur": 1,
+                "prev": 0,
+                "delta": 1,
+                "pct": null
+              },
+              "gap": 0,
+              "backlog": 0
+            },
+            {
+              "feature": "DAAC - EH",
+              "count": 1,
+              "wow": {
+                "cur": 1,
+                "prev": 0,
+                "delta": 1,
+                "pct": null
+              },
+              "gap": 0,
+              "backlog": 0
+            }
+          ],
+          "top_completed": [
+            {
+              "feature": "DAAC-Cyberbiz",
+              "count": 1
+            },
+            {
+              "feature": "DAAC-輔翼",
+              "count": 1
+            },
+            {
+              "feature": "DAAC - EH",
+              "count": 1
+            }
+          ],
+          "backlog_concentration": [
+            {
+              "feature": "DAAC-Cyberbiz",
+              "count": 2,
+              "pct": 28.6
+            },
+            {
+              "feature": "DAAC-SimplyBook.me",
+              "count": 1,
+              "pct": 14.3
+            },
+            {
+              "feature": "DAAC-91app ",
+              "count": 1,
+              "pct": 14.3
+            }
+          ],
+          "triple_risk_features": []
+        },
+        "data_quality": {
+          "invalid_dates": 0,
+          "null_priority_pct": 20.0,
+          "null_feature_pct": 20.0,
+          "null_resolve_type_pct": 30.0,
+          "null_new_feature_pct": 30.0
+        },
+        "risk_flags": {
+          "empty_resolve_type": true,
+          "single_feature_backlog": false,
+          "p1_backlog_increase": false,
+          "consecutive_created_gt_completed": false,
+          "any": true
+        },
+        "ai_insight": {
+          "stability_risk": "中等風險。本週完成率75%（3/4新增），但積壓件數達7件，顯示處理效率面臨瓶頸。已識別的三起案件中，涉及系統配置錯誤、客戶外部依賴故障及資訊不足的問題，反映根本原因分析能力不均，可能導致同類問題重複發生。",
+          "workload_structure": "工作負荷分布不均。積壓工單與新增工單比例為7:4，積壓率58%，超出健康水位。三筆摘要案件中，一筆涉及內部系統配置、一筆涉及客戶第三方依賴、一筆資訊缺失，顯示問題來源多元，需要跨職能協作但協調機制待加強。",
+          "release_quality": "存在流程缺陷。Cyberbiz案件的初期判斷錯誤、第三件缺乏基礎調查文件，均反映工單建檔、初篩、指派流程不夠嚴謹。建議強化issue triage與root cause analysis的標準化模板與檢核清單。",
+          "backlog_health": "警示等級。積壓7件相對新增4件的比例過高，預示後續週期可能面臨更大處理壓力。建議立即進行積壓工單優先級評估與工作量預測，釐清是否需要額外資源投入或客戶溝通。",
+          "escalation_risk": "中高風險。客戶硬體故障（銓宏汽車案）涉及第三方依賴，易被客戶歸咎於我方系統；Cyberbiz配置錯誤的初期誤判可能已影響客戶信任；第三件資訊缺失可能導致進一步溝通延遲，增加escalation機率。",
+          "emerging_risk": "流程成熟度風險。AI摘要指出缺乏調查資訊、初篩判斷有誤、根因分析不完整等現象，反映支援團隊的案件管理SOP執行度不足，可能隱藏更多未被識別的系統問題或客戶不滿。",
+          "action_items": [
+            "立即審查積壓7件工單，進行優先級分類與資源調配，確保本週內至少完成60%（4件以上）",
+            "制定工單標準化模板與檢核清單，強制要求初篩階段的問題描述、環境資訊、重現步驟等關鍵資訊完整性檢驗，避免第三件缺乏資訊的情況重演",
+            "針對Cyberbiz案件進行事後檢討會議，分析初期誤判根源，更新系統配置檢查流程，並評估是否需向客戶補償溝通",
+            "建立客戶第三方依賴故障的識別與溝通SOP（如銓宏案），明確責任邊界與客戶協作流程",
+            "設置每週backlog健康度監控看板，當積壓與新增比例超過1.5:1時觸發警報與管理層審視"
+          ]
+        }
+      }
+    }
+  },
+  {
     "generated_at": "2026-06-01T12:39:41.165674+08:00",
     "report_date": "2026-05-31",
     "week_start": "2026-05-25",
